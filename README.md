@@ -11,6 +11,8 @@ npm install mobbing-query
 ## Example Usage
 
 ```ts
+import { MobxQuery } from "mobbing-query";
+
 class Store {
   counter = 0;
   query: MobxQuery;
