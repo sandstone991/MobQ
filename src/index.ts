@@ -5,7 +5,6 @@ import {
   reaction,
   onBecomeUnobserved,
   onBecomeObserved,
-  toJS,
   computed,
 } from "mobx";
 import {
@@ -68,7 +67,7 @@ class _MobxQuery {
         this.qObserver.subscribe((e) => {
           this.update(e);
         }),
-        reaction(() => toJS(this.queryOptions), this._updateOptions),
+        reaction(() => this.queryOptions, this._updateOptions),
         () => {
           this.qObserver.destroy();
         },
