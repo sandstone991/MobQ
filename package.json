@@ -2,7 +2,7 @@
   "name": "mobbing-query",
   "description": "A very tiny wrapper around tanstack/query-core to provide observable queries inside mobx",
   "author": "Ahmed Azzam",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/sandstone991/MobQ"
@@ -12,11 +12,13 @@
   "exports": {
     ".": {
       "require": "./dist/mobbing-query.cjs",
-      "import": "./dist/mobbing-query.mjs"
+      "import": "./dist/mobbing-query.mjs",
+      "types": "./dist/index.d.ts"
     },
     "./dist/": {
       "import": "./dist/",
-      "require": "./dist/"
+      "require": "./dist/",
+      "types": "./dist/index.d.ts"
     }
   },
   "types": "./dist/index.d.ts",
