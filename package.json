@@ -2,7 +2,7 @@
   "name": "mobbing-query",
   "description": "A very tiny wrapper around tanstack/query-core to provice observable queries inside mobx",
   "author": "Ahmed Azzam",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./dist/mobbing-query.cjs",
   "module": "./dist/mobbing-query.mjs",
   "exports": {
