@@ -59,6 +59,6 @@ and use your mobx models like you normally would.
 
 ## Api
 
-Mobbing-query is a very tiny just exposes `MobxQuery`. `MobxQuery` is a tiny wrapper around @tanstack/query-core's  [`queryObserver`](https://tanstack.com/query/v5/docs/reference/QueryObserver) that notifies a mobx observable whenever a change happen.
+Mobbing-query is a very tiny, it just exposes `MobxQuery`. `MobxQuery` is a tiny wrapper around @tanstack/query-core's  [`queryObserver`](https://tanstack.com/query/v5/docs/reference/QueryObserver) that notifies a mobx observable whenever a change happen.
 The only difference you have to take note of when using `MobxQuery` is that the options must be a callback, so that it can be be treated as a [`computed`](https://mobx.js.org/computeds.html).
 
