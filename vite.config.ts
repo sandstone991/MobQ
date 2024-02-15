@@ -33,12 +33,21 @@ module.exports = defineConfig({
       formats,
       fileName: format => fileName[format],
     },
+    rollupOptions: {
+      external: ["mobx", "@tanstack/query-core"],
+      output: {
+        globals: {
+          mobx: "mobx",
+          "@tanstack/query-core": "TanstackQueryCore",
+        },
+      },
+    },
   },
   test: {},
   resolve: {
     alias: [
       { find: "@", replacement: path.resolve(__dirname, "src") },
       { find: "@@", replacement: path.resolve(__dirname) },
-    ],
+    ],  
   },
 });

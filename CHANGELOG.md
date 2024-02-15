@@ -1,4 +1,4 @@
 # Change Log
 
-All notable changes to the "MobQ" project will be documented in this file.
+All notable changes to the "mobq" project will be documented in this file.
 

@@ -1,13 +1,15 @@
 {
-  "name": "MobQ",
+  "name": "mobq",
+  "description": "A very tiny wrapper around tanstack/query-core to provice observable queries inside mobx",
+  "author": "Ahmed Azzam",
   "private": true,
   "version": "0.0.1",
-  "main": "./dist/MobQ.cjs",
-  "module": "./dist/MobQ.mjs",
+  "main": "./dist/mobq.cjs",
+  "module": "./dist/mobq.mjs",
   "exports": {
     ".": {
-      "require": "./dist/MobQ.cjs",
-      "import": "./dist/MobQ.mjs"
+      "require": "./dist/mobq.cjs",
+      "import": "./dist/mobq.mjs"
     },
     "./dist/": {
       "import": "./dist/",
@@ -17,7 +19,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite --host",
-    "build": "rimraf build/**/* && tsc && vite build && dts-bundle-generator --config ./dts-bundle-generator.config.ts && copyfiles ./package.json build",
+    "build": " tsc && vite build && dts-bundle-generator --config ./dts-bundle-generator.config.ts && copyfiles ./package.json build",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "lint:scripts": "eslint . --ext .ts",
@@ -25,7 +27,6 @@
     "format:scripts": "prettier . --write",
     "format:styles": "stylelint ./**/*.{css,scss} --fix",
     "format": "npm run format:scripts && npm run format:styles"
- 
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.6",
@@ -53,5 +54,9 @@
     "typescript": "^5.3.3",
     "vite": "^5.0.12",
     "vitest": "^1.2.1"
+  },
+  "dependencies": {
+    "@tanstack/query-core": "^5.20.5",
+    "mobx": "^6.12.0"
   }
 }
