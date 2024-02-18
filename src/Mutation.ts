@@ -13,6 +13,7 @@ import {
     MutationObserverResult,
     DefaultError,
     MutationObserverOptions,
+    MutateOptions,
   } from "@tanstack/query-core";
   class MobxMutation<
   TData = unknown,
@@ -38,8 +39,8 @@ import {
     get state() {
       return this.mutation.state;
     }
-    mutate(...args: Parameters<typeof this.mutation.mutate>) {
-        this.mutation.mutate(...args);
+    mutate(variables: TVariables, options?: MutateOptions<TData, TError, TVariables, TContext> | undefined ) {
+        this.mutation.mutate(variables, options);
         }
     updateOptions(options: () => MutationObserverOptions<TData, TError, TVariables, TContext>) {
         this.mutation.updateOptions(options);
@@ -85,8 +86,8 @@ import {
         ],
       );
     }
-    mutate(...args: Parameters<typeof this.mObserver.mutate>) {
-      this.mObserver.mutate(...args)
+    mutate(variables: TVariables, options?: MutateOptions<TData, TError, TVariables, TContext> | undefined ) {
+      this.mObserver.mutate(variables, options)
     }
     update(state: MutationObserverResult<TData, TError, TVariables, TContext>) {
       this.state = state;
