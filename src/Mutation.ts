@@ -11,42 +11,52 @@ import {
     QueryClient,
     MutationObserver,
     MutationObserverResult,
-    MutationOptions,
+    DefaultError,
+    MutationObserverOptions,
   } from "@tanstack/query-core";
-  
-  class MobxMutation{
-    private query: _MobxMutation;
-    constructor(...args: ConstructorParameters<typeof _MobxMutation>) {
-      this.query = new _MobxMutation(...args);
+  class MobxMutation<
+  TData = unknown,
+  TError = DefaultError,
+  TVariables = void,
+  TContext = unknown,
+> {
+    private mutation: _MobxMutation<TData, TError, TVariables, TContext>;
+    constructor(queryClient: QueryClient, mutationOptions: () => MutationObserverOptions<TData, TError, TVariables, TContext>) {
+      this.mutation = new _MobxMutation(queryClient, mutationOptions);
       makeObservable(this, {
         // @ts-expect-error Mobx can see it don't worry
-        query: observable.ref,
+        mutation: observable.ref,
       });
       onBecomeObserved(this, "query", () => {
-        this.query.setupDispoables();
+        this.mutation.setupDispoables();
       });
       onBecomeUnobserved(this, "query", () => {
-        this.query.dispose();
+        this.mutation.dispose();
       });
-      this.query;
+      this.mutation;
     }
     get state() {
-      return this.query.state;
+      return this.mutation.state;
     }
-    mutate(...args: Parameters<MutationObserver["mutate"]>) {
-      this.query.mutate(...args);
-    }
-    updateOptions(options: () => MutationOptions) {
-      this.query.updateOptions(options);
-    }
+    mutate(...args: Parameters<typeof this.mutation.mutate>) {
+        this.mutation.mutate(...args);
+        }
+    updateOptions(options: () => MutationObserverOptions<TData, TError, TVariables, TContext>) {
+        this.mutation.updateOptions(options);
+        }
   }
-  class _MobxMutation {
+  class _MobxMutation<
+  TData = unknown,
+  TError = DefaultError,
+  TVariables = void,
+  TContext = unknown,
+> {
     queryClient: QueryClient;
-    _queryOptions: () => MutationOptions;
-    mObserver!: MutationObserver;
-    public state!: MutationObserverResult;
+    _queryOptions: () => MutationObserverOptions<TData, TError, TVariables, TContext>;
+    mObserver!: MutationObserver<TData, TError, TVariables, TContext>;
+    public state!:MutationObserverResult<TData, TError, TVariables, TContext>;
     private dispoables: (() => void)[] = [];
-    constructor(queryClient: QueryClient, queryOptions: () => MutationOptions) {
+    constructor(queryClient: QueryClient, mutationOptions: () =>  MutationObserverOptions<TData, TError, TVariables, TContext>) {
       makeObservable(this, {
         state: observable.ref,
         update: action,
@@ -55,7 +65,7 @@ import {
         _updateOptions: action.bound,
       });
       this.queryClient = queryClient;
-      this._queryOptions = queryOptions;
+      this._queryOptions = mutationOptions;
     }
     get mutationOptions() {
       return this._queryOptions();
@@ -75,13 +85,13 @@ import {
         ],
       );
     }
-    mutate(...args: Parameters<MutationObserver["mutate"]>) {
+    mutate(...args: Parameters<typeof this.mObserver.mutate>) {
       this.mObserver.mutate(...args)
     }
-    update(state: MutationObserverResult) {
+    update(state: MutationObserverResult<TData, TError, TVariables, TContext>) {
       this.state = state;
     }
-    updateOptions(options: () => MutationOptions) {
+    updateOptions(options: () => MutationObserverOptions<TData, TError, TVariables, TContext>) {
       this._queryOptions = options;
     }
     _updateOptions() {

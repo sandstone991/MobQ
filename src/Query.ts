@@ -8,16 +8,24 @@ import {
     computed,
   } from "mobx";
   import {
+      DefaultError,
     QueryClient,
+    QueryKey,
     QueryObserver,
+    QueryObserverOptions,
     QueryObserverResult,
-    QueryOptions,
   } from "@tanstack/query-core";
   
-  class MobxQuery {
-    private query: _MobxQuery;
-    constructor(...args: ConstructorParameters<typeof _MobxQuery>) {
-      this.query = new _MobxQuery(...args);
+  class MobxQuery<
+  TQueryFnData = unknown,
+  TError = DefaultError,
+  TData = TQueryFnData,
+  TQueryData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
+>  {
+    private query: _MobxQuery<TQueryFnData, TError, TData, TQueryData, TQueryKey>;
+    constructor(queryClient: QueryClient, queryOptions: () => QueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>) {
+      this.query = new _MobxQuery(queryClient, queryOptions);
       makeObservable(this, {
         // @ts-expect-error Mobx can see it don't worry
         query: observable.ref,
@@ -36,17 +44,23 @@ import {
     refetch() {
       this.query.refetch();
     }
-    updateOptions(options: () => QueryOptions) {
+    updateOptions(options: () => QueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>) {
       this.query.updateOptions(options);
     }
   }
-  class _MobxQuery {
+  class _MobxQuery<
+  TQueryFnData = unknown,
+  TError = DefaultError,
+  TData = TQueryFnData,
+  TQueryData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
+>  {
     queryClient: QueryClient;
-    _queryOptions: () => QueryOptions;
-    qObserver!: QueryObserver;
-    public state!: QueryObserverResult;
+    _queryOptions: () => QueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>;
+    qObserver!: QueryObserver<TQueryFnData, TError, TData, TQueryData, TQueryKey>;
+    public state!: QueryObserverResult<TData, TError>;
     private dispoables: (() => void)[] = [];
-    constructor(queryClient: QueryClient, queryOptions: () => QueryOptions) {
+    constructor(queryClient: QueryClient, queryOptions: () => QueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>) {
       makeObservable(this, {
         state: observable.ref,
         update: action,
@@ -77,10 +91,10 @@ import {
     refetch() {
       this.qObserver.refetch();
     }
-    update(state: QueryObserverResult) {
+    update(state: QueryObserverResult<TData, TError>) {
       this.state = state;
     }
-    updateOptions(options: () => QueryOptions) {
+    updateOptions(options: () => QueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>) {
       this._queryOptions = options;
     }
   
