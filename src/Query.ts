@@ -39,7 +39,7 @@ import {
       this.query;
     }
     get state() {
-      return this.query.state;
+      return this.query.state || {};
     }
     refetch() {
       this.query.refetch();
