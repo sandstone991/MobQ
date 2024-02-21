@@ -28,10 +28,10 @@ import {
         // @ts-expect-error Mobx can see it don't worry
         mutation: observable.ref,
       });
-      onBecomeObserved(this, "query", () => {
+      onBecomeObserved(this, "mutation", () => {
         this.mutation.setupDispoables();
       });
-      onBecomeUnobserved(this, "query", () => {
+      onBecomeUnobserved(this, "mutation", () => {
         this.mutation.dispose();
       });
       this.mutation;
