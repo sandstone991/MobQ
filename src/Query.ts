@@ -76,6 +76,7 @@ import {
     }
     setupDispoables() {
       this.qObserver = new QueryObserver(this.queryClient, this.queryOptions);
+      this.state = this.qObserver.getCurrentResult();
       this.dispoables.push(
         ...[
           this.qObserver.subscribe((e) => {

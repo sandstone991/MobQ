@@ -112,6 +112,7 @@ class _MobxMutation<
       this.queryClient,
       this.wrapEffectsWithActions(this.mutationOptions),
     );
+    this.state = this.mObserver.getCurrentResult();
     this.dispoables.push(
       ...[
         this.mObserver.subscribe((e) => {
