@@ -2,7 +2,7 @@
   "name": "mobbing-query",
   "description": "A very tiny wrapper around tanstack/query-core to provide observable queries inside mobx",
   "author": "Ahmed Azzam",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/sandstone991/MobQ"

@@ -6,6 +6,7 @@ import {
   onBecomeUnobserved,
   onBecomeObserved,
   computed,
+  runInAction,
 } from 'mobx';
 import {
   QueryClient,
@@ -109,7 +110,7 @@ class _MobxMutation<
   setupDispoables() {
     this.mObserver = new MutationObserver(
       this.queryClient,
-      this.mutationOptions,
+      this.wrapEffectsWithActions(this.mutationOptions),
     );
     this.dispoables.push(
       ...[
@@ -132,13 +133,28 @@ class _MobxMutation<
   update(state: MutationObserverResult<TData, TError, TVariables, TContext>) {
     this.state = state;
   }
+  wrapEffectsWithActions(options: typeof this.mutationOptions ){
+    const targets = ['onSuccess', 'onError', 'onSettled', "onMutate"] as const
+    for(const target of targets){
+        if(options[target]){
+            const original = options[target]
+            // @ts-ignore
+            options[target] = (...args: any[]) => {
+                runInAction(() => {
+                  // @ts-ignore
+                    original(...args)
+                })
+            }
+        }}
+    return options
+    }
   updateOptions(
     options: () => MutationObserverOptions<TData, TError, TVariables, TContext>,
   ) {
     this._queryOptions = options;
   }
   _updateOptions() {
-    this.mObserver.setOptions(this.mutationOptions);
+    this.mObserver.setOptions(this.wrapEffectsWithActions(this.mutationOptions));
   }
 
   dispose() {
