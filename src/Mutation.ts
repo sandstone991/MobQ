@@ -156,8 +156,11 @@ class _MobxMutation<
   }
   _updateOptions() {
     this.mObserver.setOptions(this.wrapEffectsWithActions(this.mutationOptions));
+    this.state = this.mObserver.getCurrentResult();
   }
-
+  get mutateAsnyc(){
+    return this.state.mutate
+  }
   dispose() {
     this.dispoables.forEach((fn) => fn());
   }
