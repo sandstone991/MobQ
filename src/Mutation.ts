@@ -63,6 +63,9 @@ class MobxMutation<
     }
     this.mutation.mutate(variables, options);
   }
+  mutateAsync(variables: TVariables, options?: MutateOptions<TData, TError, TVariables, TContext> | undefined){
+    return this.mutation.mutateAsnyc(variables, options)
+  }
   updateOptions(
     options: () => MutationObserverOptions<TData, TError, TVariables, TContext>,
   ) {
