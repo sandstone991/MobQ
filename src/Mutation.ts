@@ -63,8 +63,16 @@ class MobxMutation<
     }
     this.mutation.mutate(variables, options);
   }
-  mutateAsync(variables: TVariables, options?: MutateOptions<TData, TError, TVariables, TContext> | undefined){
-    return this.mutation.mutateAsnyc(variables, options)
+  async mutateAsync(variables: TVariables, options?: MutateOptions<TData, TError, TVariables, TContext> | undefined){
+    if(!this.isObserved){
+      this.mutation.setupDispoables()
+    }
+    const promise = this.mutation.mutateAsnyc(variables, options)
+    const res = await promise;
+    if(!this.isObserved){
+      this.mutation.dispose()
+    }
+    return res
   }
   updateOptions(
     options: () => MutationObserverOptions<TData, TError, TVariables, TContext>,
